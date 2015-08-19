@@ -1,0 +1,34 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 1024
+provisioner:
+  name: chef_solo
+  chef_omnibus_install_options: ' -d /tmp/vagrant-cache/vagrant_omnibus'
+
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      vagrantfile_erb: Vagrantfile.erb
+      synced_folders:
+        - ['./result', '/tmp/result']
+    run_list:
+      - recipe[ucsc-gbib-cookbook::change-apt]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[timezone-ii]
+      - recipe[mysql::server]
+      - recipe[mysql::client]
+      - recipe[ucsc-gbib-cookbook]
+    attributes:
+      tz: "Asia/Tokyo"
+      mysql:
+        "server_root_password": "browser"
+        "server_repl_password": "browser"
+        "server_debian_password": "browser"
+busser:
+  sudo: true

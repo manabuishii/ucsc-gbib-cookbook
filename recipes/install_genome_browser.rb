@@ -26,6 +26,7 @@ end
 bash 'install browser' do
   cwd Chef::Config['file_cache_path']
   code <<-EOH
+  service mysql restart
   ./#{filename}
   rm -rf /usr/local/apache/trash
   mkdir -p /data/trash/customTrash

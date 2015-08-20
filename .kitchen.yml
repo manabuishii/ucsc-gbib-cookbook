@@ -30,5 +30,7 @@ suites:
         "server_root_password": "browser"
         "server_repl_password": "browser"
         "server_debian_password": "browser"
+      ucscgbib:
+        removefromsysv: false
 busser:
   sudo: true

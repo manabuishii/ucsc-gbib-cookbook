@@ -23,9 +23,14 @@ ruby_block "comment out read" do
 end
 
 # install browser
+removefromsysv=""
+if node[:ucscgbib][:removefromsysv]
+  removefromsysv="sysv-rc-conf mysql off"
+end
 bash 'install browser' do
   cwd Chef::Config['file_cache_path']
   code <<-EOH
+  #{removefromsysv}
   service mysql restart
   ./#{filename}
   rm -rf /usr/local/apache/trash

@@ -79,6 +79,18 @@ cookbook_file "/root/updateBrowser.sh.patch" do
   notifies :run, "bash[patch updateBrowser]", :immediately
 end
 
+#
+hostname = node['hostname']
+ruby_block "rewrite hostname" do
+  block do
+    rc = Chef::Util::FileEdit.new("/root/browserLogs/scripts/virtualBox.txt")
+    rc.search_file_replace(/^export AUTH_MACHINE\=\"browserbox\"/, "export AUTH_MACHINE=\"#{hostname}\"")
+    rc.write_file
+  end
+  action :run
+end
+
+# setup /root/.hg.conf
 template "/root/.hg.conf" do
   source 'root_hg_conf.erb'
   owner 'root'

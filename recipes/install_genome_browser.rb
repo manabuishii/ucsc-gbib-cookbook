@@ -35,11 +35,20 @@ bash 'install browser' do
   ./#{filename}
   rm -rf /usr/local/apache/trash
   mkdir -p /data/trash/customTrash
+  mkdir -p /data/trash/ct
   mkdir -p /data/gbdb
   chown -R www-data.www-data /data
+  mkdir /usr/local/apache/userdata
+  chown -R www-data.www-data /usr/local/apache/userdata
   ln -s /data/trash /usr/local/apache/trash
   ln -s /var/lib/mysql /data/mysql
   chown -R mysql.mysql /var/lib/mysql
+  cp /usr/local/apache/cgi-bin/hg.conf.local /root/hg.conf.local
+  chmod 600 /root/hg.conf.local
+  echo "include /usr/local/apache/cgi-bin/hg.conf" > /root/browserLogs/scripts/.hg.${HOSTNAME}.conf
+  chmod 600 /root/browserLogs/scripts/.hg.${HOSTNAME}.conf
+  wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/ae4aa88945e566f60c950226ab06cbd2ee749789/src/hg/lib/metaInfo.sql -O /root/metaInfo.sql
+  mysql -uroot -pbrowser customTrash < /root/metaInfo.sql
   touch "#{Chef::Config['file_cache_path']}/scriptrunning.txt"
   EOH
   action :nothing

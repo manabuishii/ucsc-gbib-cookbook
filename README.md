@@ -24,3 +24,6 @@ As root
 Setup mysql
 
 # TODO
+
+[ ] deploy dbTrash and refreshNamedSessionCustomTracks
+[ ] hg19 and hgFixed database setup

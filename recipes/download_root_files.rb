@@ -98,6 +98,14 @@ template "/root/.hg.conf" do
   mode '0600'
 end
 
+# cron for root
+remote_file "/var/spool/cron/crontabs/root" do
+  source "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/browserbox/var/spool/cron/crontabs/root"
+  mode   0600
+  retries 3
+  not_if "test -f /var/spool/cron/crontabs/root"
+end
+
 
 # # setup updateBrowser and mysql
 # mysqluserandpassword="-uroot -pbrowser"

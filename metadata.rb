@@ -1,5 +1,5 @@
 name "ucsc-gbib-cookbook"
-version "0.3.0"
+version "0.4.0"
 license 'Apache v2.0'
 maintainer 'Manabu ISHII'
 

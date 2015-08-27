@@ -36,6 +36,7 @@ bash 'install browser' do
   rm -rf /usr/local/apache/trash
   mkdir -p /data/trash/customTrash
   mkdir -p /data/trash/ct
+  mkdir -p /data/trash/hgt
   mkdir -p /data/gbdb
   chown -R www-data.www-data /data
   mkdir /usr/local/apache/userdata

@@ -1,0 +1,24 @@
+--- updateBrowser.sh.old        2015-08-27 14:17:27.038223401 +0900
++++ updateBrowser.sh    2015-08-27 14:55:35.682879945 +0900
+@@ -63,9 +63,9 @@
+ fi
+
+ # check if auto-updates were deactivated from the Vbox host via a property
+-if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
+-    exit 6
+-fi
++#if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
++#    exit 6
++#fi
+
+ # check if we have internet
+ wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
+@@ -181,7 +181,7 @@
+   # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
+   # is only valid as long as the session is open
+   # so I use the SYSTEM command
+-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
++  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --exclude=performance_schema/'*' --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+
+   echo updating hgcentral database, make sure to always overwrite
+   echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql

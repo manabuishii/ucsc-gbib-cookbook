@@ -65,17 +65,39 @@ bash 'for tableListAdd.hg19.tab' do
   EOH
 end
 
-# setup updateBrowser and mysql
-mysqluserandpassword="-uroot -pbrowser"
-ruby_block "rewrite mysql user and password" do
-  block do
-    rc = Chef::Util::FileEdit.new("/root/updateBrowser.sh")
-    #
-    rc.search_file_replace(/mysql$/, "mysql #{mysqluserandpassword}")
-    rc.search_file_replace(/^\s*mysql hg/, "mysql #{mysqluserandpassword} hg")
-    rc.search_file_replace(/^\s*mysqlcheck \-\-all/, "mysqlcheck #{mysqluserandpassword} \-\-all")
-    rc.search_file_replace(/mysql eboVir3/, "mysql #{mysqluserandpassword} eboVir3")
-    rc.write_file
-  end
-  action :run
+# install browser
+bash 'patch updateBrowser' do
+  code <<-EOH
+  patch -N /root/updateBrowser.sh < /root/updateBrowser.sh.patch
+  EOH
+  action :nothing
 end
+
+cookbook_file "/root/updateBrowser.sh.patch" do
+  source "updateBrowser.sh.patch"
+  checksum "e8409b90c16d5f86e82b25cf3f20bf0063e1bf9cc62dd6f2054676e67061df0f"
+  notifies :run, "bash[patch updateBrowser]", :immediately
+end
+
+template "/root/.hg.conf" do
+  source 'root_hg_conf.erb'
+  owner 'root'
+  group 'root'
+  mode '0600'
+end
+
+
+# # setup updateBrowser and mysql
+# mysqluserandpassword="-uroot -pbrowser"
+# ruby_block "rewrite mysql user and password" do
+#   block do
+#     rc = Chef::Util::FileEdit.new("/root/updateBrowser.sh")
+#     #
+#     rc.search_file_replace(/mysql$/, "mysql #{mysqluserandpassword}")
+#     rc.search_file_replace(/^\s*mysql hg/, "mysql #{mysqluserandpassword} hg")
+#     rc.search_file_replace(/^\s*mysqlcheck \-\-all/, "mysqlcheck #{mysqluserandpassword} \-\-all")
+#     rc.search_file_replace(/mysql eboVir3/, "mysql #{mysqluserandpassword} eboVir3")
+#     rc.write_file
+#   end
+#   action :run
+# end
